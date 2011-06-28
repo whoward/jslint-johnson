@@ -5,7 +5,7 @@ require File.join(File.dirname(__FILE__), 'lib', 'jslint-johnson', 'version')
 
 Jeweler::Tasks.new do |gem|
   gem.name        = "jslint-johnson"
-  gem.summary     = "JSLint CLI and Rake tasks via Johnson and Thor"
+  gem.summary     = "JSLint CLI and rake tasks via johnson"
   gem.description = <<-EOS
     - Ruby gem wrapper for a JSLint CLI.
     - Uses the Johnson library for performance.

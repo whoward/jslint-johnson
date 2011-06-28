@@ -23,6 +23,5 @@ Jeweler::Tasks.new do |gem|
 
   gem.executables = ['jslint-johnson']
 
-  gem.files.include 'lib/**/*.rb'
-  gem.files.exclude ''
+  gem.files = Dir.glob("lib/**/*.rb") + %w(Gemfile Gemfile.lock bin/jslint-johnson)
 end

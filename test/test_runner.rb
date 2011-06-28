@@ -1,4 +1,4 @@
-require 'test/unit'
+require File.expand_path('helper', File.dirname(__FILE__))
 
 class TestRunner < Test::Unit::TestCase
   Fixtures = {
@@ -127,5 +127,4 @@ class TestRunner < Test::Unit::TestCase
 
     assert_equal result.keys.length, 1
   end
-
 end

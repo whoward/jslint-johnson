@@ -1,4 +1,4 @@
-require 'test/unit'
+require File.expand_path('helper', File.dirname(__FILE__))
 
 class TestLintError < Test::Unit::TestCase
 

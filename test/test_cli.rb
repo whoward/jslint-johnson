@@ -1,4 +1,4 @@
-require 'test/unit'
+require File.expand_path('helper', File.dirname(__FILE__))
 require 'erb'
 
 class TestCli < Test::Unit::TestCase

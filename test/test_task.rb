@@ -78,24 +78,47 @@ class TestTask < Test::Unit::TestCase
       task.exclude_pattern = File.expand_path("fixtures/*.erb", File.dirname(__FILE__))
     end
 
-    expected_files = Dir.glob(File.expand_path("fixtures/*.js", File.dirname(__FILE__)))
+    expected_files = Dir.glob(File.expand_path("fixtures/*.js", File.dirname(__FILE__))).sort
 
     assert_equal expected_files, task.files_to_run
   end
 
-  def test_has_output
+  def test_valid_output
     result = String.new
 
     task = JSLintJohnson::RakeTask.new do |task|
+      task.include_pattern = File.expand_path("fixtures/valid.js", File.dirname(__FILE__))
       task.output_stream = StringIO.new(result, "w+")
     end
 
-    rake_task = Rake.application.lookup("lint")
+    Rake.application.lookup("lint").invoke
 
-    assert_equal 0, result.length
+    assert_equal erb_fixture("cli-valid-expected-output"), result
+  end
 
-    rake_task.invoke
+  def test_invalid_output
+    result = String.new
 
-    assert_not_equal 0, result.length
+    task = JSLintJohnson::RakeTask.new do |task|
+      task.include_pattern = File.expand_path("fixtures/invalid.js", File.dirname(__FILE__))
+      task.output_stream = StringIO.new(result, "w+")
+    end
+
+    Rake.application.lookup("lint").invoke
+
+    assert_equal erb_fixture("cli-invalid-expected-output"), result
+  end
+
+  def test_suite_output
+    result = String.new
+
+    task = JSLintJohnson::RakeTask.new do |task|
+      task.include_pattern = File.expand_path("fixtures/*.js", File.dirname(__FILE__))
+      task.output_stream = StringIO.new(result, "w+")
+    end
+
+    Rake.application.lookup("lint").invoke
+
+    assert_equal erb_fixture("cli-suite-expected-output"), result
   end
 end

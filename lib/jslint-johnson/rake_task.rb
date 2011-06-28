@@ -46,21 +46,24 @@ module JSLintJohnson
         end
 
         # put a separator line in between the ticks and any summary
-        print "\n"
+        output_stream.print "\n"
 
         # print a summary of failed files
-        formatter.summary(ARGV, lint_result)
+        formatter.summary(files_to_run, lint_result)
       end
       
       # assign the description to the rake task
       new_task.comment = description
     end
 
+    #
+    # Returns a list of all files to run, sorted
+    #
     def files_to_run
       included_files = Dir.glob(include_pattern)
       excluded_files = Dir.glob(exclude_pattern)
 
-      included_files - excluded_files
+      (included_files - excluded_files).sort
     end
 
   private

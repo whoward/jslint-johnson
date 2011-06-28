@@ -3,13 +3,7 @@ require 'erb'
 
 class TestCli < Test::Unit::TestCase
   Executable = File.expand_path("../bin/jslint-johnson", File.dirname(__FILE__))
-
-  ValidFile = File.expand_path("fixtures/valid.js", File.dirname(__FILE__))
-  InvalidFile = File.expand_path("fixtures/invalid.js", File.dirname(__FILE__))
-
-  ValidExpectedOutputFile = File.expand_path("fixtures/cli-valid-expected-output.txt.erb", File.dirname(__FILE__))
-  InvalidExpectedOutputFile = File.expand_path("fixtures/cli-invalid-expected-output.txt.erb", File.dirname(__FILE__))
-
+  
   def test_executable_exists
     assert File.exist?(Executable)
   end
@@ -17,28 +11,22 @@ class TestCli < Test::Unit::TestCase
   def test_empty_args
     result = `#{Executable}`
 
-    assert_equal "usage: #{File.basename(Executable)} FILES\n", result
+    assert_equal "usage: jslint-johnson FILES\n", result
     assert_equal false, $?.success?
   end
 
   def test_valid
-    result = `#{Executable} \"#{ValidFile}\"`
+    result = `#{Executable} \"#{js_filename "valid"}\"`
 
     assert $?.success?
-
-    expected = ::ERB.new(File.read(ValidExpectedOutputFile)).result
-
-    assert_equal expected.strip, result.strip
+    assert_equal erb_fixture("cli-valid-expected-output"), result
   end
 
   def test_invalid
-    result = `#{Executable} \"#{InvalidFile}\"`
+    result = `#{Executable} \"#{js_filename "invalid"}\"`
 
     assert_equal false, $?.success?
-
-    expected = ::ERB.new(File.read(InvalidExpectedOutputFile)).result
-
-    assert_equal expected.strip, result.strip
+    assert_equal erb_fixture("cli-invalid-expected-output"), result
   end
 
 end

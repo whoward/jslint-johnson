@@ -39,38 +39,17 @@ module JSLintJohnson
 
       # create the rake task
       new_task = task(name) do
+        formatter = JSLintJohnson::Formatter.new(output_stream)
 
-        out = output_stream
-
-        failed_files = runner.run do |file, errors|
-          # print a * or . depending on if there were errors
-          out.print errors.length > 0 ? "*" : "."
-
-          # flush standard out since print doesn't seem to do so automatically
-          out.flush
+        lint_result = runner.run do |file, errors|
+          formatter.tick(errors)
         end
+
+        # put a separator line in between the ticks and any summary
+        print "\n"
 
         # print a summary of failed files
-        if failed_files.any?
-          out.print "\n\nFailures:\n\n"
-
-          failed_files.each do |file, errors|
-            out.print "#{file}:\n"
-            errors.each do |error|
-              out.print "   line #{error.line_number} character #{error.character} #{error.reason}\n"
-            end
-          end
-        end
-
-        # print a numerical summary
-        error_count = failed_files.values.flatten.length
-
-        out.print "\n" if failed_files.empty?
-
-        out.print "\n#{ARGV.length} files, #{failed_files.length} failures, #{error_count} errors"
-
-        # add a newline to be nice to the console
-        out.print "\n"
+        formatter.summary(ARGV, lint_result)
       end
       
       # assign the description to the rake task

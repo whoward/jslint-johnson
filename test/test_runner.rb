@@ -1,12 +1,6 @@
 require File.expand_path('helper', File.dirname(__FILE__))
 
 class TestRunner < Test::Unit::TestCase
-  Fixtures = {
-    :valid => File.expand_path("fixtures/valid.js", File.dirname(__FILE__)),
-    :invalid => File.expand_path("fixtures/invalid.js", File.dirname(__FILE__)),
-    :defined_globals => File.expand_path("fixtures/defined-globals.js", File.dirname(__FILE__)),
-    :defined_options => File.expand_path("fixtures/defined-options.js", File.dirname(__FILE__))
-  }
 
   def setup
     @runner = JSLintJohnson::Runner.new(%w(foo bar))
@@ -33,8 +27,10 @@ class TestRunner < Test::Unit::TestCase
   end
 
   def test_file_found
+    filename = js_filename "valid"
+
     assert_nothing_raised do
-      JSLintJohnson::Runner.new(Fixtures[:valid]).run
+      JSLintJohnson::Runner.new(filename).run
     end
   end
 
@@ -68,53 +64,65 @@ class TestRunner < Test::Unit::TestCase
   end
 
   def test_run
-    result = JSLintJohnson::Runner.new(Fixtures[:invalid]).run
+    filename = js_filename("invalid")
+
+    result = JSLintJohnson::Runner.new(filename).run
 
     assert result.is_a?(Hash)
-    assert result.keys.include?(Fixtures[:invalid])
-    assert result[Fixtures[:invalid]].is_a?(Array)
+    assert result.keys.include?(filename)
+    assert result[filename].is_a?(Array)
   end
 
   def test_valid_run
-    result = JSLintJohnson::Runner.new(Fixtures[:valid]).run
+    filename = js_filename("valid")
 
-    errors = result[Fixtures[:valid]]
+    result = JSLintJohnson::Runner.new(filename).run
+
+    errors = result[filename]
 
     assert errors.nil?
   end
 
   def test_invalid_run
-    result = JSLintJohnson::Runner.new(Fixtures[:invalid]).run
+    filename = js_filename("invalid")
 
-    errors = result[Fixtures[:invalid]]
+    result = JSLintJohnson::Runner.new(filename).run
+
+    errors = result[filename]
 
     assert errors.any?
   end
 
   def test_defined_globals
-    result = JSLintJohnson::Runner.new(Fixtures[:defined_globals]).run
+    filename = js_filename("defined-globals")
 
-    errors = result[Fixtures[:defined_globals]]
+    result = JSLintJohnson::Runner.new(filename).run
+
+    errors = result[filename]
 
     assert errors.nil?
   end
 
   def test_defined_options
-    result = JSLintJohnson::Runner.new(Fixtures[:defined_options]).run
+    filename = js_filename("defined-options")
 
-    errors = result[Fixtures[:defined_options]]
+    result = JSLintJohnson::Runner.new(filename).run
+
+    errors = result[filename]
 
     assert errors.nil?
   end
 
   def test_block
+    filename = js_filename("valid")
+
     count = 0
 
-    JSLintJohnson::Runner.new(Fixtures[:valid]).run do |file, errors|
+    JSLintJohnson::Runner.new(filename).run do |file, errors|
       count += 1
 
       if count == 1
-        assert_equal file, Fixtures[:valid]
+        assert_equal file, filename
         assert_equal errors, []
       end
     end
@@ -123,7 +131,10 @@ class TestRunner < Test::Unit::TestCase
   end
 
   def test_rejects_successful
-    result = JSLintJohnson::Runner.new(Fixtures.values_at(:valid, :invalid)).run
+    valid_file = js_filename("valid")
+    invalid_file = js_filename("invalid")
+
+    result = JSLintJohnson::Runner.new([valid_file, invalid_file]).run
 
     assert_equal result.keys.length, 1
   end

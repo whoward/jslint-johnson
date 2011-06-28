@@ -7,36 +7,18 @@ if ARGV.empty?
   exit 1
 end
 
+formatter = JSLintJohnson::Formatter.new(STDOUT)
+
 # get a list of all failed files, printing . or * along the way depending on the result
-failed_files = JSLintJohnson::Runner.new(ARGV).run do |file, errors|
-  # print a * or . depending on if there were errors
-  print errors.length > 0 ? "*" : "."
-
-  # flush standard out since print doesn't seem to do so automatically
-  STDOUT.flush
+lint_result = JSLintJohnson::Runner.new(ARGV).run do |file, errors|
+  formatter.tick(errors)
 end
 
-# print a summary of failed files
-if failed_files.any?
-  print "\n\nFailures:\n\n"
-
-  failed_files.each do |file, errors|
-    print "#{file}:\n"
-    errors.each do |error|
-      print "   line #{error.line_number} character #{error.character} #{error.reason}\n"
-    end
-  end
-end
-
-# print a numerical summary
-error_count = failed_files.values.flatten.length
-
-print "\n" if failed_files.empty?
-
-print "\n#{ARGV.length} files, #{failed_files.length} failures, #{error_count} errors"
-
-# add a newline to be nice to the console
+# put a separator line in between the ticks and any summary
 print "\n"
 
+# print a summary of failed files
+formatter.summary(ARGV, lint_result)
+
 # exit with the status code of the number of errors
-exit(error_count)
+exit(lint_result.values.flatten.length)

@@ -5,7 +5,7 @@
 
 Gem::Specification.new do |s|
   s.name = %q{jslint-johnson}
-  s.version = "1.0.1"
+  s.version = "1.0.2"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["William Howard"]
@@ -24,6 +24,7 @@ Gem::Specification.new do |s|
     "bin/jslint-johnson",
     "lib/jslint-johnson.rb",
     "lib/jslint-johnson/formatter.rb",
+    "lib/jslint-johnson/js/jslint.js",
     "lib/jslint-johnson/lint_error.rb",
     "lib/jslint-johnson/rake_task.rb",
     "lib/jslint-johnson/runner.rb",

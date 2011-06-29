@@ -9,6 +9,7 @@ module JSLintJohnson
 
     def tick(errors)
       output_stream.print(errors.any?? "*" : ".")
+      output_stream.flush
     end
 
     def summary(tested_files, lint_result)

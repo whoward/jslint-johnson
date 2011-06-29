@@ -58,7 +58,7 @@ module JSLintJohnson
     end
 
     def jslint_result
-      runtime["JSLINT"]["errors"].to_a.map do |error_object|
+      runtime["JSLINT"]["errors"].to_a.compact.map do |error_object|
         JSLintJohnson::LintError.new(error_object)
       end
     end

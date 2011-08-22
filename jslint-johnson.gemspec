@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["William Howard"]
-  s.date = %q{2011-06-29}
+  s.date = %q{2011-08-17}
   s.default_executable = %q{jslint-johnson}
   s.description = %q{    - Ruby gem wrapper for a JSLint CLI.
     - Uses the Johnson library for performance.
@@ -18,9 +18,11 @@ Gem::Specification.new do |s|
 }
   s.email = %q{whoward.tke@gmail.com}
   s.executables = ["jslint-johnson"]
+  s.extra_rdoc_files = [
+    "README.markdown"
+  ]
   s.files = [
     "Gemfile",
-    "Gemfile.lock",
     "bin/jslint-johnson",
     "lib/jslint-johnson.rb",
     "lib/jslint-johnson/formatter.rb",
@@ -32,7 +34,7 @@ Gem::Specification.new do |s|
   ]
   s.homepage = %q{http://github.com/whoward/jslint-johnson}
   s.require_paths = ["lib"]
-  s.rubygems_version = %q{1.6.1}
+  s.rubygems_version = %q{1.6.2}
   s.summary = %q{JSLint CLI and rake tasks via johnson}
   s.test_files = [
     "test/helper.rb",
@@ -49,18 +51,18 @@ Gem::Specification.new do |s|
 
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
       s.add_runtime_dependency(%q<johnson>, ["~> 1.2.0"])
-      s.add_runtime_dependency(%q<rake>, ["~> 0.8.7"])
+      s.add_runtime_dependency(%q<rake>, [">= 0.8.7"])
       s.add_runtime_dependency(%q<jeweler>, ["~> 1.5.0"])
       s.add_runtime_dependency(%q<johnson>, ["~> 1.2.0"])
     else
       s.add_dependency(%q<johnson>, ["~> 1.2.0"])
-      s.add_dependency(%q<rake>, ["~> 0.8.7"])
+      s.add_dependency(%q<rake>, [">= 0.8.7"])
       s.add_dependency(%q<jeweler>, ["~> 1.5.0"])
       s.add_dependency(%q<johnson>, ["~> 1.2.0"])
     end
   else
     s.add_dependency(%q<johnson>, ["~> 1.2.0"])
-    s.add_dependency(%q<rake>, ["~> 0.8.7"])
+    s.add_dependency(%q<rake>, [">= 0.8.7"])
     s.add_dependency(%q<jeweler>, ["~> 1.5.0"])
     s.add_dependency(%q<johnson>, ["~> 1.2.0"])
   end

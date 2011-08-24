@@ -50,6 +50,9 @@ module JSLintJohnson
 
         # print a summary of failed files
         formatter.summary(files_to_run, lint_result)
+
+        # raise an exception if there are errors
+        raise "jslint suite failed" unless lint_result.empty?
       end
       
       # assign the description to the rake task

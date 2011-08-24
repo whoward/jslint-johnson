@@ -104,7 +104,9 @@ class TestTask < Test::Unit::TestCase
       task.output_stream = StringIO.new(result, "w+")
     end
 
-    Rake.application.lookup("lint").invoke
+    assert_raise RuntimeError do
+      Rake.application.lookup("lint").invoke
+    end
 
     assert_equal erb_fixture("cli-invalid-expected-output"), result
   end
@@ -117,7 +119,7 @@ class TestTask < Test::Unit::TestCase
       task.output_stream = StringIO.new(result, "w+")
     end
 
-    Rake.application.lookup("lint").invoke
+    Rake.application.lookup("lint").invoke rescue # exception raised because of failing suite
 
     assert_equal erb_fixture("cli-suite-expected-output"), result
   end
